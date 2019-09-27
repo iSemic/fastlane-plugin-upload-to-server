@@ -12,6 +12,9 @@ module Fastlane
         params[:apk] = config[:apk]
         params[:ipa] = config[:ipa]
         params[:file] = config[:file]
+        params[:method] = config[:method]
+        params[:user] = config[:user]
+        params[:password] = config[:password]
 
         params[:multipartPayload] = config[:multipartPayload]
         params[:headers] = config[:headers]
@@ -48,7 +51,9 @@ module Fastlane
 
       def self.upload_file(params, multipart_payload)
         request = RestClient::Request.new(
-          method: :post,
+          method: params[:method],
+          user: params[:user],
+          password: params[:password],
           url: params[:endPoint],
           payload: multipart_payload,
           headers: params[:headers],
@@ -108,8 +113,25 @@ module Fastlane
                                   description: "file upload request url",
                                   optional: false,
                                   default_value: "",
+                                  type: String),
+          FastlaneCore::ConfigItem.new(key: :method,
+                                  env_name: "",
+                                  description: "basic authorization username",
+                                  optional: false,
+                                  default_value: "",
+                                  type: String),
+          FastlaneCore::ConfigItem.new(key: :user,
+                                  env_name: "",
+                                  description: "basic authorization user",
+                                  optional: true,
+                                  default_value: "",
+                                  type: String),
+            FastlaneCore::ConfigItem.new(key: :password,
+                                  env_name: "",
+                                  description: "basic authorization password",
+                                  optional: true,
+                                  default_value: "",
                                   type: String)
-
         ]
       end
 
